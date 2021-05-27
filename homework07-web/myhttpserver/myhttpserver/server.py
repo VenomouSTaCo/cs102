@@ -1,7 +1,6 @@
 import datetime
 import socket
 import threading
-import time
 import traceback
 import typing as tp
 
@@ -39,7 +38,6 @@ class TCPServer:
         self.host = host
         self.port = port
         self.server_address = (host, port)
-        # @see: https://stackoverflow.com/questions/36594400/what-is-backlog-in-tcp-connections
         self.backlog_size = backlog_size
         self.request_handler_cls = request_handler_cls
         self.max_workers = max_workers
@@ -48,9 +46,6 @@ class TCPServer:
         self._ended = False
 
     def serve_forever(self) -> None:
-        # @see: http://veithen.io/2014/01/01/how-tcp-backlog-works-in-linux.html
-        # @see: https://en.wikipedia.org/wiki/Thundering_herd_problem
-        # @see: https://stackoverflow.com/questions/17630416/calling-accept-from-multiple-threads
         server_socket = socket.socket()
         server_socket.bind(self.server_address)
         server_socket.listen(self.backlog_size)
@@ -79,9 +74,9 @@ class TCPServer:
     def handle_accept(self, server_socket: socket.socket, latch: CountDownLatch) -> None:
         while not self._ended:
             try:
-                conn, addr = server_socket.accept()
-                conn.settimeout(self.timeout)
-                handler = self.request_handler_cls(conn, addr, self)
+                conction, adres = server_socket.accept()
+                conction.settimeout(self.timeout)
+                handler = self.request_handler_cls(conction, adres, self)
                 print("Handling request... ", end="")
                 handler.handle()
                 print("OK")
