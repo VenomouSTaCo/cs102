@@ -4,11 +4,12 @@ import typing as tp
 
 import jwt
 
-from slowapi import JsonResponse, SlowAPI, Request
+from slowapi import JsonResponse, Request, SlowAPI
 from slowapi.middlewares import CORSMiddleware
 
 app = SlowAPI()
 notes: tp.Dict[int, tp.Dict[str, tp.Any]] = {}
+users: tp.Set[str] = set()
 
 JWT_SECRET = "secret"
 JWT_ALGORITHM = "HS256"
@@ -23,9 +24,9 @@ def dt_json_serializer(o):
 @app.post("/api/jwt-auth/")
 def login(request: Request) -> JsonResponse:
     user_data = request.json()
-    users.add(user_data["email"])
+    users.add(user_data["email"])  # type:ignore
     payload = {
-        "email": user_data["email"],
+        "email": user_data["email"],  # type:ignore
         "exp": dt.datetime.utcnow() + dt.timedelta(seconds=JWT_EXP_DELTA_SECONDS),
     }
     jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
@@ -36,10 +37,10 @@ def login(request: Request) -> JsonResponse:
 def add_note(request: Request) -> JsonResponse:
     note = request.json()
     note_id = len(notes) + 1
-    note["id"] = note_id
-    note["pub_date"] = dt.datetime.now()
-    notes[note_id] = note
-    return JsonResponse(data=note, serializer=dt_json_serializer)
+    note["id"] = note_id  # type:ignore
+    note["pub_date"] = dt.datetime.now().isoformat()  # type:ignore
+    notes[note_id] = note  # type:ignore
+    return JsonResponse(data=note, serializer=dt_json_serializer)  # type:ignore
 
 
 @app.get("/api/notes")
@@ -49,18 +50,18 @@ def get_notes(request: Request) -> JsonResponse:
 
 
 @app.get("/api/notes/{id}")
-def get_note(request: Request, id: int) -> JsonResponse:
+def get_note(request: Request, id: str) -> JsonResponse:
     note_id = int(id)
-    return JsonResponse(data=notes[note_id], serializer=dt_json_serializer)
+    return JsonResponse(data=notes.get(note_id), serializer=dt_json_serializer)
 
 
 @app.patch("/api/notes/{id}")
-def update_note(request: Request, id: int) -> JsonResponse:
+def update_note(request: Request, id: str) -> JsonResponse:
     note_id = int(id)
     data = request.json()
     note = notes[note_id]
-    note["title"] = data["title"]
-    note["body"] = data["body"]
+    note["title"] = data["title"]  # type:ignore
+    note["body"] = data["body"]  # type:ignore
     return JsonResponse(data={})
 
 
