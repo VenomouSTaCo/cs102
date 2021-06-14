@@ -1,7 +1,7 @@
 from bottle import template, route, run, redirect, request
 from bs4 import BeautifulSoup
 import requests
-from sqlalchemy import *
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 import app.classifier as classifier
 import os
@@ -83,7 +83,7 @@ def new_to_pair(new):
     return new.title, new.author
 
 
-class News(Base):
+class News(Base):  # type:ignore
     __tablename__ = "news"
     id = Column(Integer, primary_key=True)
     title = Column(String)

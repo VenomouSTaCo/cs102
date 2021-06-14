@@ -4,8 +4,9 @@ import time
 
 import pytest
 import requests
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import *
+
 
 from app.classifier import *
 from app.main import get_all_with_label, get_all_without_label, add_news_to_db, start_server
@@ -48,7 +49,7 @@ class TestDB:
 
     __need_to_init_db = False
 
-    class __News(__Base):
+    class __News(__Base):  # type:ignore
         __tablename__ = "news"
         id = Column(Integer, primary_key=True)
         title = Column(String)
