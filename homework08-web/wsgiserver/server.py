@@ -16,11 +16,7 @@ class ApplicationType:
 
 
 class WSGIServer(HTTPServer):  # type:ignore
-    def __init__(
-            self,
-            timeout: tp.Optional[float] = 0.5,
-            **kwargs
-    ) -> None:  # type:ignore
+    def __init__(self, timeout: tp.Optional[float] = 0.5, **kwargs) -> None:  # type:ignore
         if "request_handler_cls" not in kwargs:
             kwargs["request_handler_cls"] = WSGIRequestHandler
         super().__init__(timeout=timeout, **kwargs)
@@ -37,7 +33,9 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):  # type:ignore
     request_klazz = WSGIRequest
     response_klazz = WSGIResponse
 
-    def __init__(self, client_socket: socket.socket, address: Address, server: WSGIServer, *args, **kwargs) -> None:
+    def __init__(
+        self, client_socket: socket.socket, address: Address, server: WSGIServer, *args, **kwargs
+    ) -> None:
         super().__init__(client_socket, address, server, *args, **kwargs)
         self.server = server  # because we want to explicitly specify that we have wsgi server
 

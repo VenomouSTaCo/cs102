@@ -57,7 +57,13 @@ class TCPServer:
         try:
             for i in range(self.max_workers):
                 self._threads.append(
-                    threading.Thread(target=self.handle_accept, args=(server_socket, latch,))
+                    threading.Thread(
+                        target=self.handle_accept,
+                        args=(
+                            server_socket,
+                            latch,
+                        ),
+                    )
                 )
                 self._threads[-1].start()
 
@@ -103,4 +109,3 @@ class HTTPServer(TCPServer):
         request_handler_cls: tp.Type[BaseRequestHandler] = BaseHTTPRequestHandler,
     ):
         super().__init__(host, port, backlog_size, max_workers, timeout, request_handler_cls)
-
