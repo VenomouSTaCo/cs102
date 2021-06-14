@@ -45,7 +45,9 @@ class NaiveBayesClassifier:
                 words_in_classes[c][word] = words_in_classes[c].get(word, 0) + 1
 
         for c in self.__C:
-            self.__words_in_classes[c] = merge(self.__words_in_classes.get(c, {}), words_in_classes.get(c, {}))
+            self.__words_in_classes[c] = merge(
+                self.__words_in_classes.get(c, {}), words_in_classes.get(c, {})
+            )
         self.__words = merge(words, self.__words)
         self.__d = len(self.__words)
 
@@ -88,5 +90,3 @@ def get_data(file_path):
 def clean(s):
     translator = str.maketrans("", "", string.punctuation)
     return s.translate(translator)
-
-

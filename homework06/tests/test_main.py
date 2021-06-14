@@ -20,7 +20,7 @@ class TestClassifier:
     def test_score(self):
         X_train, y_train, X_test, y_test = self.__get_data()
 
-        model = NaiveBayesClassifier(10**-7)
+        model = NaiveBayesClassifier(10 ** -7)
         model.fit(X_train, y_train)
 
         score = model.score(X_test, y_test)
@@ -30,8 +30,8 @@ class TestClassifier:
     def test_equal_results(self):
         X_train, y_train, X_test, y_test = self.__get_data()
 
-        model1 = NaiveBayesClassifier(10**-7)
-        model2 = NaiveBayesClassifier(10**-7)
+        model1 = NaiveBayesClassifier(10 ** -7)
+        model2 = NaiveBayesClassifier(10 ** -7)
 
         model1.fit(X_train, y_train)
 

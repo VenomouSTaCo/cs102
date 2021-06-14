@@ -24,19 +24,19 @@ def get_all_without_label(s: Session):
     return s.query(News).filter(News.label == None).all()
 
 
-@route('/')
+@route("/")
 def index():
     redirect("/news")
 
 
-@route('/news')
+@route("/news")
 def news_list():
     s = session()
     rows = get_all_without_label(s)
-    return template(f'{template_dir}/news_template', rows=rows)
+    return template(f"{template_dir}/news_template", rows=rows)
 
 
-@route('/add_label')
+@route("/add_label")
 def add_label():
     label = request.params["label"]
     new_id = request.params["id"]
@@ -46,14 +46,14 @@ def add_label():
     record.label = label
     bayes.fit([record.title], [record.label])
     s.commit()
-    redirect(f'/{page}')
+    redirect(f"/{page}")
 
 
-@route('/update_news')
+@route("/update_news")
 def update_news():
     page = request.params["page"]
     add_news_to_db(session(), News)
-    redirect(f'/{page}')
+    redirect(f"/{page}")
 
 
 def add_news_to_db(s: Session, News):
@@ -67,7 +67,7 @@ def add_news_to_db(s: Session, News):
     s.commit()
 
 
-@route('/recommendations')
+@route("/recommendations")
 def recommendations():
     s = session()
     unclassified_news = get_all_without_label(s)
@@ -76,7 +76,7 @@ def recommendations():
         classified_new: News = new
         classified_new.label = label
         classified_news.append(classified_new)
-    return template(f'{template_dir}/news_recommendations', rows=classified_news)
+    return template(f"{template_dir}/news_recommendations", rows=classified_news)
 
 
 def new_to_pair(new):
@@ -98,7 +98,9 @@ Base.metadata.create_all(bind=engine)
 
 
 def extract_next_page(page_n):
-    soup = BeautifulSoup(requests.get(f"https://news.ycombinator.com/news?p={page_n}").text, "html.parser")
+    soup = BeautifulSoup(
+        requests.get(f"https://news.ycombinator.com/news?p={page_n}").text, "html.parser"
+    )
 
     athings = soup.find_all("tr", {"class": "athing"})
     if len(athings) == 0:
@@ -180,5 +182,5 @@ def start_server():
     run(host="localhost", port=8080)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_server()
