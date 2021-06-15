@@ -34,9 +34,8 @@ class SlowAPI:
         path_splitted = environ["PATH_INFO"].rsplit("/", 1)[0]
 
         for route in self.routes:
-            if (route.method == method
-                    and (path == route.path
-                         or path_splitted == route.path.rsplit("/", 1)[0])
+            if route.method == method and (
+                path == route.path or path_splitted == route.path.rsplit("/", 1)[0]
             ):
                 return route
         raise Exception("No such route")
@@ -44,7 +43,7 @@ class SlowAPI:
     @staticmethod
     def __get_args(route: Route, environ) -> tp.List[str]:
         if "{" in route.path:
-            args = environ["PATH_INFO"][route.path.find("{"):].split("/")
+            args = environ["PATH_INFO"][route.path.find("{") :].split("/")
             if len(args) == 1 and args[0] == "":
                 args = []
         else:
