@@ -50,9 +50,9 @@ def get_notes(request: Request) -> JsonResponse:
 
 
 @app.get("/api/notes/{id}")
-def get_note(request: Request, id: str) -> JsonResponse:
+def get_note(request: Request, id: str) -> JsonResponse:  # type:ignore
     note_id = int(id)
-    return JsonResponse(data=notes.get(note_id), serializer=dt_json_serializer)
+    return JsonResponse(data=notes.get(note_id), serializer=dt_json_serializer)  # type:ignore
 
 
 @app.patch("/api/notes/{id}")
