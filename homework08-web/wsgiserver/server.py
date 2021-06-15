@@ -39,12 +39,12 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):  # type:ignore
         super().__init__(client_socket, address, server, *args, **kwargs)
         self.server = server  # because we want to explicitly specify that we have wsgi server
 
-    def handle_request(self, request: WSGIRequest) -> WSGIResponse:
+    def handle_request(self, request: WSGIRequest) -> WSGIResponse:  # type:ignore
         environ = request.to_environ()
         environ["SERVER_NAME"] = self.address[0]
         environ["SERVER_PORT"] = self.address[1]
         response = WSGIResponse()
-        app = self.server.get_app()
+        app = self.server.get_app()  # type:ignore
         body_iterable = app(environ, response.start_response)  # type:ignore
         response.body = b"".join(body_iterable)
         return response
