@@ -1,1 +1,11 @@
-
+psycopg2
+pg8000
+sqlalchemy~=1.4.19
+postgres
+fastapi~=0.65.2
+uvicorn
+passlib~=1.7.4
+python-jose
+python-multipart
+bcrypt
+pydantic~=1.8.2
